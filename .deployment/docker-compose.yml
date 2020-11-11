@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+    backend:
+         container_name: backend
+         hostname: backend
+         build: "../backend/"
+         entrypoint: sh /code/backend/entrypoint.sh
+         volumes:
+           - ../backend:/code/backend
+         env_file: .env
+         ports:
+           - 8000:8000
+volumes:
+    backend:
