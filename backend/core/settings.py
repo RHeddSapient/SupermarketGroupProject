@@ -27,7 +27,7 @@ SECRET_KEY = '7%1*l&1eh0^!^^7_^_xi2s&i0sjtylal7agpw@t7&@xz5)pg9^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['192.168.0.44', 'localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -75,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'supermarketRouteApi.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -129,7 +129,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-CORS_ORIGIN_WHITELIST = (
-     'localhost:3000/'
- )
+CORS_ORIGIN_WHITELIST = [
+   'http://localhost:8101',
+   'http://localhost:3000',
+]

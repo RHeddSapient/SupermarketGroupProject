@@ -2,7 +2,7 @@
 FROM python:3.8.6-buster
 
 # -- Set environment variables required for setup on any machine.
-ENV DJANGO_SETTINGS_MODULE "core.local_settings"
+ENV DJANGO_SETTINGS_MODULE "core.settings"
 ENV PYTHONUNBUFFERED 1
 ENV PGAPPNAME dr_backend
 # ---- Set to non-null value to disable warnings when running `apt-get` commands.
