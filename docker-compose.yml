@@ -1,12 +1,41 @@
 version: '3.7'
 
 services:
-  web:
-    build: ./services/web
+  nginx:
+    build: ./services/nginx_routing
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - shopping_list_service 
+      - route_calc_service
+    expose:
+      - 80    
+    networks:
+      - proxy
+  shopping_list_service:
+    build: ./services/shopping_list_service
     command: python manage.py run -h 0.0.0.0
     volumes:
-      - ./services/web/:/usr/src/app/
+      - ./services/shopping_list_service/:/usr/src/app/shopping_list_service/
     ports:
-      - 5000:5000
+      - 5001:5001
     env_file:
       - ./.env.dev
+    networks:
+      - proxy
+  route_calc_service:
+    build: ./services/route_calc_service
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/route_calc_service/:/usr/src/app/route_calc_service/
+    ports:
+      - 5002:5002
+    env_file:
+      - ./.env.dev
+    networks:
+      - proxy
+
+
+networks:
+  proxy:

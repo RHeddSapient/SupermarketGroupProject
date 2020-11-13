@@ -27,9 +27,13 @@ class ScriptTest(Resource):
         new_data = test_script(json_data['x'], json_data['y'])
         return {'new_x':new_data[0], 'new_y': new_data[1]} 
        
+class MicroTest(Resource):
+    def get(self):
+        return {"Message": "Route Calc"}
 
+api.add_resource(MicroTest, "/")
 api.add_resource(HelloWorld, "/helloworld/<string:name>")
 api.add_resource(ScriptTest, "/scripttest")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5002,debug=True)
