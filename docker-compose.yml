@@ -35,6 +35,28 @@ services:
       - ./.env.dev
     networks:
       - proxy
+  position_service:
+    build: ./services/position_service
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/position_service/:/usr/src/app/position_service/
+    ports:
+      - 5003:5003
+    env_file:
+      - ./.env.dev
+    networks:
+      - proxy
+  user_service:
+    build: ./services/user_service
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/user_service/:/usr/src/app/user_service/
+    ports:
+      - 5004:5004
+    env_file:
+      - ./.env.dev
+    networks:
+      - proxy
 
 
 networks:
