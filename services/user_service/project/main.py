@@ -23,25 +23,34 @@ class CheckUser(Resource):
         q_user = User.query.filter_by(username=uname).first()
 
         if q_user:
-            return {"Exists":1}
+            return {"Exists":1, "id": q_user.id}
 
         return {"Exists":0}
 
 class AddUser(Resource):
     def post(self):
         json_data = request.get_json(force=True)
+
+        q_user = User.query.filter_by(username=json_data['username']).first()
+
+        if q_user:
+            return {"Success":0, "id":q_user.id, "Exists":1}
+
         new_user = User(username=json_data['username'])
+
         db.session.add(new_user)
+        db.session.flush()
+        new_user_id = new_user.id
         db.session.commit()
 
+        return {"Success":1, "id":new_user_id, "Exists":0}
 
 
-        return {"Success":1}
         
 
-api.add_resource(MicroTest, "/" )
-api.add_resource(CheckUser, "/checkuser/<string:uname>/" )
-api.add_resource(AddUser, "/adduser/" )
+api.add_resource(MicroTest, "/test/" )
+api.add_resource(CheckUser, "/<string:uname>/" )
+api.add_resource(AddUser, "/add/" )
 
 if __name__ == "__main__":
     app.run(port = 5004, debug=True)
