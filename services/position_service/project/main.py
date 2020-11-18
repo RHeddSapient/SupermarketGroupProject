@@ -10,30 +10,37 @@ app.config.from_object("project.config.Config")
 
 from project.models import *
 
-parser = reqparse.RequestParser()
-parser.add_argument('x', type=int)
-parser.add_argument('y', type=int)
-
-names= {"mop":{"age":25, "gender": "male"},
-       "bill": {"age":70, "gender":"male"}}
-
-class HelloWorld(Resource):
-    def get(self, name):
-        return names[name] 
-    
-class ScriptTest(Resource):
-    def post(self):
-        json_data = request.get_json(force=True)
-        new_data = test_script(json_data['x'], json_data['y'])
-        return {'new_x':new_data[0], 'new_y': new_data[1]} 
-       
 class MicroTest(Resource):
     def get(self):
         return {"Message": "Position"}
 
-api.add_resource(MicroTest, "/" )
-api.add_resource(HelloWorld, "/helloworld/<string:name>")
-api.add_resource(ScriptTest, "/scripttest")
+class GetAllShoppers(Resource):
+    def get(self, s_id):
+        positions = Position.query.filter_by(store_id=s_id).all()
+        output = [{"user_id":pos.user_id, "current_position": [pos.x_loc, pos.y_loc]} for pos in positions]
+        return jsonify(output)
+
+class UpdatePosition(Resource):
+    def post(self, s_id, u_id):
+        json_data = request.get_json(force=True)
+        position = Position.query.filter_by(store_id = s_id, user_id = u_id).first()
+        position.x_loc = json_data['x_loc']
+        position.y_loc = json_data['y_loc']
+
+        return {"Success":1}
+
+class GetMap(Resource):
+    def get(self, s_id):
+        st = Store.get(s_id)
+        if not st:
+            return {"Success":0}
+        return st.map
+
+
+api.add_resource(MicroTest, "/test/" )
+api.add_resource(GetAllShoppers, "/<int:s_id>/all/")
+api.add_resource(GetMap, "/<int:s_id>/map/")
+api.add_resource(UpdatePosition, "/<int:s_id>/<int:u_id>/")
 
 if __name__ == "__main__":
     app.run(port = 5003, debug=True)
