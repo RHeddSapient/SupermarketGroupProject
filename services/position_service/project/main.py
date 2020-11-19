@@ -15,12 +15,14 @@ class MicroTest(Resource):
         return {"Message": "Position"}
 
 class GetAllShoppers(Resource):
+    # get all shoppers x     
     def get(self, s_id):
         positions = Locations.query.filter_by(store_id=s_id).all()
         output = [{"user_id":pos.user_id, "username":User.query.get(pos.user_id).username,"current_position": [pos.x_loc, pos.y_loc]} for pos in positions]
         return jsonify(output)
 
 class UpdatePosition(Resource):
+    # update agent position x     
     def post(self, s_id, u_id):
         json_data = request.get_json(force=True)
         st = Store.query.get(s_id)
