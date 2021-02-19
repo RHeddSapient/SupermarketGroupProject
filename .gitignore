@@ -1,2 +1,4 @@
 *.pyc
 *.pyo
+services/route_calc_service/project/routing/
+
